@@ -16,31 +16,16 @@ def main():
 
     # Call the Sheets API
     SPREADSHEET_ID = '1mp0x8AV7cTM45BqHzQ5uO-ga9JN48OA-yfNedcsnRkQ'
-    ranges = ['PR Sheet!B3:P3', 'PR Sheet!B7:P7', 'PR Sheet!B11:P11', 'PR Sheet!B15:P15']
-    values = service.spreadsheets().values().batchGet(spreadsheetId=SPREADSHEET_ID,ranges=ranges,majorDimension='ROWS',valueRenderOption='UNFORMATTED_VALUE').execute()
+    ranges = ['PR Sheet!B3:P4', 'PR Sheet!B7:P8', 'PR Sheet!B11:P12', 'PR Sheet!B15:P16']
+    values = service.spreadsheets().values().batchGet(spreadsheetId=SPREADSHEET_ID,ranges=ranges,majorDimension='ROWS',valueRenderOption='UNFORMATTED_VALUE',dateTimeRenderOption='FORMATTED_STRING').execute()
 
     if not values:
         print('No data found.')
     else:
-        print("Squat")
-        for v in values['valueRanges'][0]['values'][0]:
-            if v != 0 and v != '':
-                print(v)
-
-        print("Bench")
-        for v in values['valueRanges'][1]['values'][0]:
-            if v != 0 and v != '':
-                print(v)
-
-        print("Deadlift")
-        for v in values['valueRanges'][2]['values'][0]:
-            if v != 0 and v != '':
-                print(v)
-
-        print("Press")
-        for v in values['valueRanges'][3]['values'][0]:
-            if v != 0 and v != '':
-                print(v)
+        for i in range(0, 4):
+            for x, y in zip(values['valueRanges'][i]['values'][0], values['valueRanges'][i]['values'][1]):
+                if x != 0 and x != '':
+                    print(x, y)
 
 
 if __name__ == '__main__':
