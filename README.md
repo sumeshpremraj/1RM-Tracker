@@ -22,3 +22,5 @@ $ ./tracker.py
 * Make a pip module
 * Accept local Excel files as data source
 * Customizable location (sheet/row/column) for the required data
+* Customizable 1RM formula (Epley, Brzycki, McGlothin)
+* Make dates for AMRAP optional, for compatibility with standard Reddit template
