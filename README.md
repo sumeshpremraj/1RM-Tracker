@@ -6,6 +6,14 @@ I wrote this for personal use, so it is very restrictive about the Sheets format
 interest, I plan to package this into a Python module, enable different input sources (like Excel sheets on your local 
 storage), different programs etc.
 
+#### Why spreadsheets and not an app?
+For some weird reason, everyone seems to have defaulted to mobile apps even for use cases where something else like a 
+website or a spreadsheet makes sense. My reasons for using spreadsheets are simple:
+* No dependence on an app (many of which are abandoned in time)
+* Easy to read, update and use
+* Can be plugged into scripts and tools like this
+* Can be printed out if you prefer to keep your phone away at gym but want to check the routine
+
 #### Requirements
 * Python 3
 * requests, matplotlib and its dependencies
