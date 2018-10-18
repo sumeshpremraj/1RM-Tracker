@@ -1,15 +1,27 @@
 #!/usr/bin/env python
 from __future__ import print_function
+
+import logging
+import matplotlib.pyplot as plt
+
+from collections import OrderedDict
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
-import matplotlib.pyplot as plt
-from collections import OrderedDict
 
 # If modifying these scopes, delete the file token.json
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = logging.FileHandler('tracker.log')
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
 def main():
+    logger.info("Initiating Sheets authorization")
     store = file.Storage('token.json')
     creds = store.get()
     if not creds or creds.invalid:
@@ -20,10 +32,12 @@ def main():
     # Call the Sheets API
     SPREADSHEET_ID = '1mp0x8AV7cTM45BqHzQ5uO-ga9JN48OA-yfNedcsnRkQ'
     ranges = ['PR Sheet!A2:P4', 'PR Sheet!A6:P8', 'PR Sheet!A10:P12', 'PR Sheet!A14:P16']
+
+    logger.info("Getting data from Sheets")
     values = service.spreadsheets().values().batchGet(spreadsheetId=SPREADSHEET_ID,ranges=ranges,majorDimension='ROWS',valueRenderOption='UNFORMATTED_VALUE',dateTimeRenderOption='FORMATTED_STRING').execute()
 
     if not values:
-        print('No data found.')
+        logger.info('No data found.')
     else:
 
         # Example data structure
@@ -61,33 +75,34 @@ def main():
                 if weight == 'Rep max':
                     # First column contains Squat/Rep Max/Date as the data
                     # This is to get the name of the lift
-                    print(rep)
                     lift = rep
+                    logger.debug("Lift: " + lift)
                     stats[lift] = {}
                     continue
 
                 elif weight not in(0, ''):
                     if not all([rep, weight, date]):
-                        print("Missing data in the column, check spreadsheet")
+                        logger.info("Missing data in the column, check spreadsheet")
                         continue
                     # print(rep, weight, date)
 
                     # Epley formula
                     rep_max = weight * (1 + rep / 30)
-                    # print(date, rep_max)
+                    logger.debug(date, rep_max)
 
                     # TODO: Convert string to Python date objects OR check Sheets API for Date type
                     stats[lift][date] = rep_max
 
-            print("Plotting "+lift)
+            logger.info("Plotting " + lift)
             x = OrderedDict(sorted(stats[lift].items(), key=lambda t: t[0]))
-            print(x)
+            logger.debug(x)
             plt.plot(x.keys(), x.values())        # (date, 1RM)
 
         plt.show()
-        print("Stats: ")
-        print(stats)
+        logger.debug("Stats: ")
+        logger.debug(stats)
 
 
 if __name__ == '__main__':
+    logger.info("Starting 1RM Tracker")
     main()
