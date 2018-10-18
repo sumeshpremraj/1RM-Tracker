@@ -24,18 +24,34 @@ def main():
     if not values:
         print('No data found.')
     else:
+
+        # Example data structure
+        # stats = {
+        #     'Squat': [['8/10/2018', '15/10/2018', '12/10/2018'], [112.0, 124.66666666666667, 120.0]],
+        #     'Bench': [['15/10/2018', '8/10/2018', '12/10/2018'], [80.16666666666667, 78.0, 82.0]],
+        #     'Deadlift': [['10/10/2018'], [105.0]],
+        #      'Press': [['10/10/2018'], [57.0]]
+        # }
+        stats = {}
+
         plt.xlabel("Date")
         plt.ylabel("1RM")
 
         for i in range(0, 4):
+            lift = ''
             for rep, weight, date in zip(values['valueRanges'][i]['values'][0], values['valueRanges'][i]['values'][1],
                                          values['valueRanges'][i]['values'][2]):
                 if weight == 'Rep max':
                     # First column contains Squat/Rep Max/Date as the data
-                    # This is to print the name of the lift
+                    # This is to get the name of the lift
                     print(rep)
+                    lift = rep
+                    stats[lift] = []
+                    stats[lift].append([])  # date
+                    stats[lift].append([])  # 1RM
                     continue
-                elif weight != 0 and weight != '':
+
+                elif weight not in(0, ''):
                     if not all([rep, weight, date]):
                         print("Missing data in the column, check spreadsheet")
                         continue
@@ -43,9 +59,16 @@ def main():
 
                     # Epley formula
                     rep_max = weight * (1 + rep / 30)
-                    print(date, rep_max)
-                    plt.plot(date, rep_max, 'go-', linewidth=2)
+                    # print(date, rep_max)
+                    stats[lift][0].append(date)
+                    stats[lift][1].append(rep_max)
+            print("Plotting "+lift)
+            print(stats[lift][0], stats[lift][1])
+            plt.plot(stats[lift][0], stats[lift][1])        # (date, 1RM)
+
         plt.show()
+        print(stats)
+
 
 if __name__ == '__main__':
     main()
