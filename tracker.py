@@ -4,6 +4,7 @@ from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 import matplotlib.pyplot as plt
+from collections import OrderedDict
 
 # If modifying these scopes, delete the file token.json
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
@@ -26,12 +27,28 @@ def main():
     else:
 
         # Example data structure
-        # stats = {
-        #     'Squat': [['8/10/2018', '15/10/2018', '12/10/2018'], [112.0, 124.66666666666667, 120.0]],
-        #     'Bench': [['15/10/2018', '8/10/2018', '12/10/2018'], [80.16666666666667, 78.0, 82.0]],
-        #     'Deadlift': [['10/10/2018'], [105.0]],
-        #      'Press': [['10/10/2018'], [57.0]]
-        # }
+# stats =
+#         {
+#             'Squat': {
+#                 112.0: '8/10/2018',
+#                 124.66666666666667: '15/10/2018',
+#                 120.0: '12/10/2018'
+#             },
+#             'Bench': {
+#                 80.16666666666667: '15/10/2018',
+#                 78.0: '8/10/2018',
+#                 82.0: '12/10/2018'
+#             },
+#             'Deadlift': {
+#                 113.33333333333333: '12/10/2018',
+#                 105.0: '10/10/2018'
+#             },
+#             'Press': {
+#                 57.0: '10/10/2018',
+#                 66.66666666666666: '12/10/2018'
+#             }
+#         }
+
         stats = {}
 
         plt.xlabel("Date")
@@ -46,9 +63,7 @@ def main():
                     # This is to get the name of the lift
                     print(rep)
                     lift = rep
-                    stats[lift] = []
-                    stats[lift].append([])  # date
-                    stats[lift].append([])  # 1RM
+                    stats[lift] = {}
                     continue
 
                 elif weight not in(0, ''):
@@ -60,13 +75,17 @@ def main():
                     # Epley formula
                     rep_max = weight * (1 + rep / 30)
                     # print(date, rep_max)
-                    stats[lift][0].append(date)
-                    stats[lift][1].append(rep_max)
+
+                    # TODO: Convert string to Python date objects OR check Sheets API for Date type
+                    stats[lift][date] = rep_max
+
             print("Plotting "+lift)
-            print(stats[lift][0], stats[lift][1])
-            plt.plot(stats[lift][0], stats[lift][1])        # (date, 1RM)
+            x = OrderedDict(sorted(stats[lift].items(), key=lambda t: t[0]))
+            print(x)
+            plt.plot(x.keys(), x.values())        # (date, 1RM)
 
         plt.show()
+        print("Stats: ")
         print(stats)
 
 
