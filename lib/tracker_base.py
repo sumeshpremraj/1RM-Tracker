@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 import logging
+import os
 import matplotlib.pyplot as plt
 
 from collections import OrderedDict
@@ -67,6 +68,7 @@ class TrackerBase(object):
 
 
     def plot_data(self, values):
+        self.ensure_graph_dir()
         stats = {}
         plt.xlabel("Date")
         plt.ylabel("1RM")
@@ -99,8 +101,16 @@ class TrackerBase(object):
             x = OrderedDict(sorted(stats[lift].items(), key=lambda t: t[0]))
             logger.debug(x)
             plt.title(lift)
-            plt.plot(x.keys(), x.values())  # (x-axis: date, y-axis: 1RM)
-            plt.show()
+            plt.plot(x.keys(), x.values(), 'go-')  # (x-axis: date, y-axis: 1RM)
+            plt.savefig(lift + '.png')
 
         logger.debug("Stats: ")
         logger.debug(stats)
+
+    # TODO: Make graph dir customizable
+    def ensure_graph_dir(self, graph_dir='graphs'):
+        if not os.path.exists(graph_dir):
+            logger.debug("./" + graph_dir + "does not exist, creating it")
+            os.makedirs(graph_dir)
+        logger.debug("Changing to ./" + graph_dir)
+        os.chdir(graph_dir)
