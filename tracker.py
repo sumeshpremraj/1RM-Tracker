@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 import logging
-from tracker_base import TrackerBase
+from lib.tracker_base import TrackerBase
 
 # If modifying these scopes, delete the file token.json
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
