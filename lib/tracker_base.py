@@ -99,7 +99,7 @@ class TrackerBase(object):
             x = OrderedDict(sorted(stats[lift].items(), key=lambda t: t[0]))
             logger.debug(x)
             plt.plot(x.keys(), x.values())  # (x-axis: date, y-axis: 1RM)
+            plt.show()
 
-        plt.show()
         logger.debug("Stats: ")
         logger.debug(stats)
