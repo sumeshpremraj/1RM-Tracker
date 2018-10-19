@@ -31,14 +31,15 @@ def main():
         service = build('sheets', 'v4', http=creds.authorize(Http()))
         return service
 
-    # Call the Sheets API
-    SPREADSHEET_ID = '1mp0x8AV7cTM45BqHzQ5uO-ga9JN48OA-yfNedcsnRkQ'
-    ranges = ['PR Sheet!A2:P4', 'PR Sheet!A6:P8', 'PR Sheet!A10:P12', 'PR Sheet!A14:P16']
-    service = auth()
 
-    logger.info("Getting data from Sheets")
-    values = service.spreadsheets().values().batchGet(spreadsheetId=SPREADSHEET_ID,ranges=ranges,majorDimension='ROWS',valueRenderOption='UNFORMATTED_VALUE',dateTimeRenderOption='FORMATTED_STRING').execute()
+    def get_data(spreadsheet_id='1mp0x8AV7cTM45BqHzQ5uO-ga9JN48OA-yfNedcsnRkQ', ranges=['PR Sheet!A2:P4', 'PR Sheet!A6:P8', 'PR Sheet!A10:P12', 'PR Sheet!A14:P16']):
+        service = auth()
 
+        logger.info("Getting data from Sheets")
+        values = service.spreadsheets().values().batchGet(spreadsheetId=spreadsheet_id,ranges=ranges,majorDimension='ROWS',valueRenderOption='UNFORMATTED_VALUE',dateTimeRenderOption='FORMATTED_STRING').execute()
+        return values
+
+    values = get_data()
     if not values:
         logger.info('No data found.')
     else:
