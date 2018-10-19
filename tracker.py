@@ -3,12 +3,6 @@ from __future__ import print_function
 
 import logging
 from tracker_base import TrackerBase
-import matplotlib.pyplot as plt
-
-from collections import OrderedDict
-from googleapiclient.discovery import build
-from httplib2 import Http
-from oauth2client import file, client, tools
 
 # If modifying these scopes, delete the file token.json
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
