@@ -13,12 +13,37 @@ from oauth2client import file, client, tools
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler('tracker.log')
-handler.setLevel(logging.INFO)
+handler.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+
+
+# Example data structure
+# stats =
+#         {
+#             'Squat': {
+#                 112.0: '8/10/2018',
+#                 124.66666666666667: '15/10/2018',
+#                 120.0: '12/10/2018'
+#             },
+#             'Bench': {
+#                 80.16666666666667: '15/10/2018',
+#                 78.0: '8/10/2018',
+#                 82.0: '12/10/2018'
+#             },
+#             'Deadlift': {
+#                 113.33333333333333: '12/10/2018',
+#                 105.0: '10/10/2018'
+#             },
+#             'Press': {
+#                 57.0: '10/10/2018',
+#                 66.66666666666666: '12/10/2018'
+#             }
+#         }
+
 
 def main():
     def auth():
@@ -43,68 +68,46 @@ def main():
     if not values:
         logger.info('No data found.')
     else:
-
-        # Example data structure
-# stats =
-#         {
-#             'Squat': {
-#                 112.0: '8/10/2018',
-#                 124.66666666666667: '15/10/2018',
-#                 120.0: '12/10/2018'
-#             },
-#             'Bench': {
-#                 80.16666666666667: '15/10/2018',
-#                 78.0: '8/10/2018',
-#                 82.0: '12/10/2018'
-#             },
-#             'Deadlift': {
-#                 113.33333333333333: '12/10/2018',
-#                 105.0: '10/10/2018'
-#             },
-#             'Press': {
-#                 57.0: '10/10/2018',
-#                 66.66666666666666: '12/10/2018'
-#             }
-#         }
-
         stats = {}
 
         plt.xlabel("Date")
         plt.ylabel("1RM")
 
-        for i in range(0, 4):
-            lift = ''
-            for rep, weight, date in zip(values['valueRanges'][i]['values'][0], values['valueRanges'][i]['values'][1],
-                                         values['valueRanges'][i]['values'][2]):
-                if weight == 'Rep max':
-                    # First column contains Squat/Rep Max/Date as the data
-                    # This is to get the name of the lift
-                    lift = rep
-                    logger.debug("Lift: " + lift)
-                    stats[lift] = {}
-                    continue
-
-                elif weight not in(0, ''):
-                    if not all([rep, weight, date]):
-                        logger.info("Missing data in the column, check spreadsheet")
+        def plot_data():
+            for i in range(0, 4):
+                lift = ''
+                for rep, weight, date in zip(values['valueRanges'][i]['values'][0], values['valueRanges'][i]['values'][1],
+                                             values['valueRanges'][i]['values'][2]):
+                    if weight == 'Rep max':
+                        # First column contains Squat/Rep Max/Date as the data
+                        # This is to get the name of the lift
+                        lift = rep
+                        logger.debug("Lift: " + lift)
+                        stats[lift] = {}
                         continue
-                    # print(rep, weight, date)
 
-                    # Epley formula
-                    rep_max = weight * (1 + rep / 30)
-                    logger.debug(date, rep_max)
+                    elif weight not in(0, ''):
+                        if not all([rep, weight, date]):
+                            logger.info("Missing data in the column, check spreadsheet")
+                            continue
+                        # print(rep, weight, date)
 
-                    # TODO: Convert string to Python date objects OR check Sheets API for Date type
-                    stats[lift][date] = rep_max
+                        # Epley formula
+                        rep_max = weight * (1 + rep / 30)
+                        logger.debug(date + " " + str(rep_max))
 
-            logger.info("Plotting " + lift)
-            x = OrderedDict(sorted(stats[lift].items(), key=lambda t: t[0]))
-            logger.debug(x)
-            plt.plot(x.keys(), x.values())        # (date, 1RM)
+                        # TODO: Convert string to Python date objects OR check Sheets API for Date type
+                        stats[lift][date] = rep_max
 
-        plt.show()
-        logger.debug("Stats: ")
-        logger.debug(stats)
+                logger.info("Plotting " + lift)
+                x = OrderedDict(sorted(stats[lift].items(), key=lambda t: t[0]))
+                logger.debug(x)
+                plt.plot(x.keys(), x.values())        # (x-axis: date, y-axis: 1RM)
+
+            plt.show()
+            logger.debug("Stats: ")
+            logger.debug(stats)
+        plot_data()
 
 
 if __name__ == '__main__':
