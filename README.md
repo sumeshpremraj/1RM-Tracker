@@ -26,7 +26,7 @@ $ ./tracker.py
 ```
 
 #### (Maybe) TO DO
-* Make a pip module
+* Port to Golang and create static binaries anybody can run
 * Accept local Excel files as data source
 * Make dates for AMRAP optional, for compatibility with standard Reddit template
 * Customizable

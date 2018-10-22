@@ -70,10 +70,10 @@ class TrackerBase(object):
     def plot_data(self, values):
         self.ensure_graph_dir()
         stats = {}
-        plt.xlabel("Date")
-        plt.ylabel("1RM")
 
         for i in range(0, 4):
+            plt.xlabel("Date")
+            plt.ylabel("1RM")
             lift = ''
             for rep, weight, date in zip(values['valueRanges'][i]['values'][0], values['valueRanges'][i]['values'][1],
                                          values['valueRanges'][i]['values'][2]):
@@ -103,6 +103,7 @@ class TrackerBase(object):
             plt.title(lift)
             plt.plot(x.keys(), x.values(), 'go-')  # (x-axis: date, y-axis: 1RM)
             plt.savefig(lift + '.png')
+            plt.close()
 
         logger.debug("Stats: ")
         logger.debug(stats)
