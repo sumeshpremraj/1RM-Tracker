@@ -74,6 +74,7 @@ class TrackerBase(object):
         for i in range(0, 4):
             plt.xlabel("Date")
             plt.ylabel("1RM")
+            plt.grid(True)
             lift = ''
             for rep, weight, date in zip(values['valueRanges'][i]['values'][0], values['valueRanges'][i]['values'][1],
                                          values['valueRanges'][i]['values'][2]):
