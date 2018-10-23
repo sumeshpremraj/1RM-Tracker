@@ -13,6 +13,9 @@ website or a spreadsheet makes sense. My reasons for using spreadsheets are simp
 * Can be plugged into scripts and tools like this
 * Can be printed out if you prefer to keep your phone away at gym but want to check the routine
 
+#### Screenshots
+![1RM+ sample graphs](screenshots/screenshot-1.png?raw=true)
+
 #### Requirements
 * Python 3
 * requests, matplotlib and its dependencies
@@ -25,11 +28,13 @@ $ source .venv/bin/activate
 $ ./tracker.py
 ```
 
-#### (Maybe) TO DO
-* Port to Golang and create static binaries anybody can run
-* Accept local Excel files as data source
-* Make dates for AMRAP optional, for compatibility with standard Reddit template
-* Customizable
-    * location (sheet/row/column) for the required data
-    * 1RM formula (Epley, Brzycki, McGlothin)
-    * date format
+#### TO DO
+- [ ] Accept local Excel files as data source
+- [ ] Make dates for AMRAP optional, for compatibility with standard Reddit template
+- [ ] Customizable
+    - [ ] location (sheet/row/column) for the required data
+    - [ ] 1RM formula (Epley, Brzycki, McGlothin)
+    - [ ] date format
+- [ ] Package Python as an executable (py2exe and py2app)
+<br/>OR<br/>
+- [ ] Port to Golang and create static binaries anybody can run
