@@ -18,15 +18,22 @@ website or a spreadsheet makes sense. My reasons for using spreadsheets are simp
 
 #### Requirements
 * Python 3
-* requests, matplotlib and its dependencies
+* requests, matplotlib and its dependencies (will be installed during the virtual env setup)
 * [Sheets API key](https://developers.google.com/sheets/api/quickstart/python)
 
 #### Usage
+Enter your stats in the 531 spreadsheet (either the default from Reddit or my customized one which includes date)
+
+Then, run the following commands:
+
 ```
 $ python3 -m venv .venv
 $ source .venv/bin/activate
+$ pip install -r requirements.txt
 $ ./tracker.py
 ```
+
+The script will trigger a Google Oauth flow to access your documents.
 
 #### TO DO
 - [ ] Accept local Excel files as data source
