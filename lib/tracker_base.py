@@ -76,27 +76,28 @@ class TrackerBase(object):
             plt.ylabel("1RM")
             plt.grid(True)
             lift = ''
-            for rep, weight, date in zip(values['valueRanges'][i]['values'][0], values['valueRanges'][i]['values'][1],
+            for reps, weights, dates in zip(values['valueRanges'][i]['values'][0], values['valueRanges'][i]['values'][1],
                                          values['valueRanges'][i]['values'][2]):
-                if weight == 'Rep max':
+                if weights == 'Rep max':
                     # First column contains Squat/Rep Max/Date as the data
                     # This is to get the name of the lift
-                    lift = rep
+                    lift = reps
                     logger.debug("Lift: " + lift)
                     stats[lift] = {}
                     continue
 
-                elif weight not in (0, ''):
-                    if not all([rep, weight, date]):
+                elif weights not in (0, ''):
+                    if not all([reps, weights, dates]):
                         logger.info("Missing data in the column, check spreadsheet")
                         continue
 
-                    # Epley formula
-                    rep_max = weight * (1 + rep / 30)
-                    logger.debug(date + " " + str(rep_max))
+                    for weight, date in zip(str(weights).split(','), dates.split(',')):
+                        # Epley formula
+                        rep_max = int(weight) * (1 + reps / 30)
+                        logger.debug(date + " " + str(rep_max))
 
-                    # TODO: Convert string to Python date objects OR check Sheets API for Date type
-                    stats[lift][date] = rep_max
+                        # TODO: Convert string to Python date objects OR check Sheets API for Date type
+                        stats[lift][date] = rep_max
 
             logger.info("Plotting " + lift)
             x = OrderedDict(sorted(stats[lift].items(), key=lambda t: t[0]))
