@@ -99,9 +99,8 @@ class TrackerBase(object):
 
             logger.info("Plotting " + lift)
             x = OrderedDict(sorted(stats[lift].items(), key=lambda t: t[0]))
-            logger.debug(x)
             plt.title(lift)
-            plt.plot(x.keys(), x.values(), 'go-')  # (x-axis: date, y-axis: 1RM)
+            plt.plot(list(x.keys()), list(x.values()), 'go-')  # (x-axis: date, y-axis: 1RM)
             plt.savefig(lift + '.png')
             plt.close()
 

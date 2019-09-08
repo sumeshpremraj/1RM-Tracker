@@ -36,12 +36,6 @@ $ ./tracker.py
 The script will trigger a Google Oauth flow to access your documents.
 
 #### TO DO
+- [ ] Process Google Drive folder of spreadsheets
 - [ ] Accept local Excel files as data source
-- [ ] Make dates for AMRAP optional, for compatibility with standard Reddit template
-- [ ] Customizable
-    - [ ] location (sheet/row/column) for the required data
-    - [ ] 1RM formula (Epley, Brzycki, McGlothin)
-    - [ ] date format
 - [ ] Package Python as an executable (py2exe and py2app)
-<br/>OR<br/>
-- [ ] Port to Golang and create static binaries anybody can run
