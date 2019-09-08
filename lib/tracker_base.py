@@ -91,7 +91,7 @@ class TrackerBase(object):
 
                     for weight, date in zip(str(weights).split(','), dates.split(',')):
                         # Epley formula
-                        rep_max = int(weight) * (1 + reps / 30)
+                        rep_max = float(weight) * (1 + reps / 30)
                         logger.debug(date + " " + str(rep_max))
 
                         # TODO: Convert string to Python date objects OR check Sheets API for Date type
